@@ -1,0 +1,22 @@
+name: Build Windows EXE
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install PyInstaller
+        run: python -m pip install pyinstaller
+      - name: Build Fitness Trainer MAX
+        run: python -m PyInstaller --noconfirm --clean --onefile --windowed --name FitnessTrainerMAX fitness_trainer.py
+      - name: Publish EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: FitnessTrainerMAX-Windows
+          path: dist/FitnessTrainerMAX.exe
